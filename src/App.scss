@@ -7,6 +7,10 @@
   margin-top: 2rem !important;
 }
 
+.flex-grow {
+  flex-grow: 1;
+}
+
 /* AUTH */
 
 .auth-layout {
@@ -32,6 +36,75 @@
     }
   }
 }
+
+/* NAV BAR */
+
+.account-box {
+  display: flex;
+  align-items: center;
+  width: 25%;
+  min-width: 200px;
+  justify-content: space-between;
+}
+
+/* TODO */
+
+.todo-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .todo-wrapper {
+    max-width: 700px;
+    width: 50%;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+                0 25px 50px 0 rgba(0, 0, 0, 0.1);
+    .row {
+      padding: 10px;
+      border: none;
+      background: rgba(0, 0, 0, 0.003);
+      box-shadow: inset 0 -2px 1px rgba(0,0,0,0.3);
+      width: 100%;
+      display: flex;
+      align-items: center;
+      .todo-input {
+        border: none;
+        background: inherit;
+        width: 100%;
+        &:focus {
+          outline: none;
+        }
+      }
+      .check-box {
+        font-size: 2rem;
+        &.checked {
+          color: green;
+        }
+      }
+      .active {
+        text-decoration: line-through;
+      }
+      .delete-button, 
+      .add-button {
+        margin-left: auto;
+        opacity: 0;
+        transition: all .6s;
+      }
+      .add-button {
+        opacity: 1;
+      }
+      &:hover .delete-button {
+        opacity: 1;
+      }
+    }
+    .filter-box {
+      color: #9E9E9E;
+      justify-content: space-between;
+    }
+  }
+}
+
+
 
 
 

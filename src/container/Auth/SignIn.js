@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AuthLayout from './../../hoc/Layout/AuthLayout';
+import AuthLayout from './../../hoc/AuthLayout';
 
 import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
