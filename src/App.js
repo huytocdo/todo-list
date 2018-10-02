@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import {Route, Switch, withRouter, Redirect} from 'react-router-dom';
 import './App.scss';
-import Title from './component/Title';
+import Auth from './container/Auth/Auth';
+import SignUpForm from './component/SignUpForm/SignUpForm';
 class App extends Component {
   render() {
+    let routes = (
+      <Switch>
+        <Route path="/signup" exact component={SignUpForm} />
+        <Route path="/" exact component={Auth} />
+        <Redirect to="/" />
+      </Switch>
+    )
     return (
-      <div className="App">
-        <Title />
+      <div className="app">
+        {routes}
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
