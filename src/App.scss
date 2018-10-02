@@ -1,4 +1,4 @@
-
+/* ULTILITIES */
 
 .mt-1 {
   margin-top: 1rem !important;
@@ -6,3 +6,33 @@
 .mt-2 {
   margin-top: 2rem !important;
 }
+
+/* AUTH */
+
+.auth-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  padding-top: 2rem;
+  .auth-box {
+    width: 60%;
+    margin: auto;
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
+    .avatar {
+      background-color: #f50057;
+      margin-bottom: .6rem;
+    }
+    .auth-form {
+      width: 100%;
+    }
+  }
+}
+
+
+
+
