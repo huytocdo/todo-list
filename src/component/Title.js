@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
 import './Title.scss';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Icon from '@material-ui/core/Icon';
 
 export default class Title extends Component {
   render() {
     return (
       <div>
-        <h1 className="title-1 title-1-blue">
+        <Typography variant="display4" gutterBottom>
+          Display 4
+        </Typography>
+        <Button variant="contained" color="primary">
           Hello World
-        </h1>
+        </Button>
+        <Icon>star</Icon>
       </div>
     )
   }
