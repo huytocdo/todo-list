@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,17 +12,16 @@ import Typography from '@material-ui/core/Typography';
 
 import './SignUpForm.scss';
 
-function SignUp(props) {
-  console.log(props);
+function SignUpForm(props) {
   return (
     <React.Fragment>
       <CssBaseline />
-      <main className="sign-up-tab-wrapper">
+      <main className="sign-up-wrapper">
         <Paper className="sign-up-box">
           <Avatar className="avatar">
             <Favorite />
           </Avatar>
-          <Typography variant="h5">Sign Up</Typography>
+          <Typography variant="title">Sign Up</Typography>
           <form className="sign-in-form">
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Email Address</InputLabel>
@@ -41,7 +41,7 @@ function SignUp(props) {
               <Input
                 name="password"
                 type="password"
-                id="password"
+                id="retype-password"
                 autoComplete="current-password"
               />
             </FormControl>
@@ -54,6 +54,17 @@ function SignUp(props) {
             >
               Sign Up
             </Button>
+            <Link to="/" style={{ textDecoration: 'none' }}>
+              <Button
+                type="button"
+                fullWidth
+                variant="raised"
+                color="default"
+                className="mt-1"
+              >
+                Go Back
+              </Button>
+            </Link>
           </form>
         </Paper>
       </main>
@@ -61,4 +72,4 @@ function SignUp(props) {
   );
 }
 
-export default SignUp;
+export default SignUpForm;
