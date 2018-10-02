@@ -14,7 +14,7 @@ import './SignUpForm.scss';
 
 function SignUpForm(props) {
   return (
-    <React.Fragment>
+    <div className="sign-up">
       <CssBaseline />
       <main className="sign-up-wrapper">
         <Paper className="sign-up-box">
@@ -68,7 +68,7 @@ function SignUpForm(props) {
           </form>
         </Paper>
       </main>
-    </React.Fragment>
+    </div>
   );
 }
 

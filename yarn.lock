@@ -777,6 +777,14 @@
     "@babel/runtime" "7.0.0"
     recompose "^0.29.0"
 
+"@material-ui/lab@^3.0.0-alpha.18":
+  version "3.0.0-alpha.18"
+  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-3.0.0-alpha.18.tgz#d3c3a77364fefa7be9d759ed080a5c2b6b97b8ac"
+  dependencies:
+    "@babel/runtime" "7.0.0"
+    classnames "^2.2.5"
+    keycode "^2.1.9"
+
 "@svgr/core@^2.4.1":
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/@svgr/core/-/core-2.4.1.tgz#03a407c28c4a1d84305ae95021e8eabfda8fa731"

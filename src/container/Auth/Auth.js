@@ -6,12 +6,12 @@ import SignInForm from './../../component/SignInForm/SignInForm';
 class Auth extends React.Component {
   render() {
     return (
-      <>
-        <Typography className="" variant="display3">
+      <div className="auth-wrapper">
+        <Typography variant="display3">
           To Do List
         </Typography>
         <SignInForm />
-      </>
+      </div>
     );
   }
 }
