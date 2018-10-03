@@ -1,12 +1,11 @@
 import React from 'react';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
 
-export default ({id, completed, text}) => {
+export default ({id, completed, text, removeHandler, changeStatusHandler}) => {
   return (
     <div className="row">
       <Checkbox 
@@ -16,13 +15,13 @@ export default ({id, completed, text}) => {
           root: 'check-box',
           checked: 'checked',
         }}
-        value={id}
         checked={completed} 
+        onChange={changeStatusHandler}
       />
       <Typography variant="display1" noWrap className={completed ? 'active' : ' '}>
         {text}
       </Typography>
-      <IconButton className="delete-button" aria-label="Delete">
+      <IconButton className="delete-button" aria-label="Delete" onClick={removeHandler}>
         <DeleteIcon />
       </IconButton>
     </div>

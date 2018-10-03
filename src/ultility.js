@@ -12,35 +12,41 @@ export const errorText = {
     }
 };
 
+export const filterType = {
+    ALL: 'ALL',
+    COMPLETED: 'COMPLETED',
+    ACTIVE: 'ACTIVE',
+}
+
 export const checkValidity = ( value, rules ) => {
-  let isValid = true;
-  if ( !rules ) {
-      return true;
-  }
-
-  if ( rules.required ) {
-      isValid = value.trim() !== '' && isValid;
-  }
-
-  if ( rules.minLength ) {
-      isValid = value.length >= rules.minLength && isValid
-  }
-
-  if ( rules.maxLength ) {
-      isValid = value.length <= rules.maxLength && isValid
-  }
-
-  if ( rules.isEmail ) {
-      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-      isValid = pattern.test( value ) && isValid
-  }
-
-  if ( rules.isNumeric ) {
-      const pattern = /^\d+$/;
-      isValid = pattern.test( value ) && isValid
-  }
-
-  return isValid;
+    let isValid = true;
+    if ( !rules ) {
+        return true;
+    }
+    
+    if ( rules.required ) {
+        isValid = value.trim() !== '' && isValid;
+    }
+    
+    if ( rules.minLength ) {
+        isValid = value.length >= rules.minLength && isValid
+    }
+    
+    if ( rules.maxLength ) {
+        isValid = value.length <= rules.maxLength && isValid
+    }
+    
+    if ( rules.isEmail ) {
+        const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+        isValid = pattern.test( value ) && isValid
+    }
+    
+    if ( rules.isNumeric ) {
+        const pattern = /^\d+$/;
+        isValid = pattern.test( value ) && isValid
+    }
+    
+    return isValid;
 }
 
 export const createIndex = (objArr) => {
@@ -51,4 +57,12 @@ export const createIndex = (objArr) => {
     } else return 1;
 }
 
+export function guid() {
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
 
+function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+    .toString(16)
+    .substring(1);
+}

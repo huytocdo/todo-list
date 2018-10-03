@@ -12,17 +12,26 @@ class App extends Component {
     this.props.onTryAutoSignin();
   }
 
-
   render() {
     let routes = (
       <Switch>
         <Route path="/signup" exact component={SignUp} />
-        <Route path="/todolist" exact component={ToDo} />
-        <Route path="/logout" exact component={Logout} />
         <Route path="/" exact component={SignIn} />
         <Redirect to="/" />
       </Switch>
     )
+
+    if( this.props.isLogged) {
+      routes = (
+        <Switch>
+          <Route path="/signup" exact component={SignUp} />
+          <Route path="/todolist" exact component={ToDo} />
+          <Route path="/logout" exact component={Logout} />
+          <Route path="/" exact component={SignIn} />
+          <Redirect to="/" />
+      </Switch>
+      )
+    }
     return (
       <div className="app">
         {routes}

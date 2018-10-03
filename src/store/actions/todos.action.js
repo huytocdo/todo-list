@@ -1,35 +1,5 @@
 import * as actionTypes from './actionTypes';
 
-export const addTodo = (token, uid, text, index, status = false) => ({
-  type: actionTypes.ADD_TODO,
-  payload: {
-    token,
-    uid,
-    text,
-    status,
-    index,
-  }
-})
-
-export const addTodoStart = () => ({
-  type: actionTypes.ADD_TODO_START,
-})
-
-export const addTodoSuccess = (todoId, todo) => ({
-  type: actionTypes.ADD_TODO_SUCCESS,
-  payload: {
-    todoId,
-    todo,
-  }
-})
-
-export const addTodoFail = (error) => ({
-  type: actionTypes.ADD_TODO_FAIL,
-  payload: {
-    error,
-  }
-})
-
 export const fetchTodo = (token, uid) => ({
   type: actionTypes.FETCH_TODO,
   payload: {
@@ -56,9 +26,44 @@ export const fetchTodoFail = (error) => ({
   }
 })
 
-
-
-export const removeTodo = (todoId) => ({
-  type: actionTypes.REMOVE_TODO,
-  payload: todoId,
+export const addTodo = (id, index, text, status) => ({
+  type: actionTypes.ADD_TODO,
+  payload: {
+    id,
+    index,
+    text,
+    status,
+  }
 })
+
+export const removeTodo = (id) => ({
+  type: actionTypes.REMOVE_TODO,
+  payload: {
+    id,
+  }
+})
+
+export const changeTodoStatus = (id) => ({
+  type: actionTypes.CHANGE_TODO_STATUS,
+  payload: {
+    id,
+  }
+})
+
+export const completeAllTodo = () => ({
+  type: actionTypes.COMPLETED_ALL_TODO,
+})
+
+export const uncompleteAllTodo = () => ({
+  type: actionTypes.UNCOMPLETED_ALL_TODO,
+})
+
+export const changeTodoFilter = (filterType) => ({
+  type: actionTypes.CHANGE_TODO_FILTER,
+  payload: {
+    filterType,
+  }
+})
+
+
+

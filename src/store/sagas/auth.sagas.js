@@ -1,4 +1,4 @@
-import { put, call } from 'redux-saga/effects';
+import { put } from 'redux-saga/effects';
 import { delay } from "redux-saga";
 import axios from 'axios';
 import * as actions from './../actions/index.action';
@@ -18,6 +18,7 @@ export function* signup(action) {
     yield localStorage.setItem("token", response.data.idToken);
     yield localStorage.setItem("expirationDate", expirationDate);
     yield localStorage.setItem("uid", response.data.localId);
+    yield localStorage.setItem("email", response.data.email);
     yield put(
       actions.signupSuccess(response.data.idToken, response.data.localId, response.data.email)
     );
@@ -43,6 +44,7 @@ export function* signin(action) {
     yield localStorage.setItem("token", response.data.idToken);
     yield localStorage.setItem("expirationDate", expirationDate);
     yield localStorage.setItem("uid", response.data.localId);
+    yield localStorage.setItem("email", response.data.email);
     yield put(
       actions.signinSuccess(response.data.idToken, response.data.localId, response.data.email)
     );
@@ -52,7 +54,7 @@ export function* signin(action) {
   }
 }
 
-export function* authCheckState(action) {
+export function* authCheckState() {
   const token = yield localStorage.getItem("token");
   if(!token) {
     yield put(actions.signout())
@@ -64,7 +66,8 @@ export function* authCheckState(action) {
       yield put(actions.signout())
     } else {
       const uid = yield localStorage.getItem("uid");
-      yield put(actions.signinSuccess(token, uid));
+      const email = yield localStorage.getItem("email");
+      yield put(actions.signinSuccess(token, uid, email));
       yield put(
         actions.authCheckTimeout(
           (expirationDate.getTime() - new Date().getTime()) / 1000

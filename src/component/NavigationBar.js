@@ -7,7 +7,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Link from './../component/UI/Link';
 
-export default () => {
+export default (props) => {
   return (
     <AppBar position="static">
       <Toolbar>
@@ -19,7 +19,7 @@ export default () => {
             <AccountCircle />
           </Avatar>
           <Typography variant="subheading" color="inherit">
-            ndhuyspkt@gmail.com
+            {props.email}
           </Typography>
           <Button color="inherit">Save My List</Button>
           <Link to="/logout">

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
 
-
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Checkbox from '@material-ui/core/Checkbox';
 import Icon from '@material-ui/core/Icon';
@@ -15,7 +14,7 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 import NavigationBar from './../../component/NavigationBar';
 import ToDoItem from './../../component/ToDoItem';
 import * as actions from './../../store/actions/index.action';
-import { createIndex } from './../../ultility';
+import { createIndex, guid, filterType } from './../../ultility';
 
 const styles = theme => ({
   root: {
@@ -34,30 +33,66 @@ class ToDo extends Component {
 
   submitTodo = () => {
     const index = createIndex(this.props.todos);
+    const todoId = guid();
+    this.props.onAddTodo(todoId, index, this.state.todoInput, false);
     this.setState(update(this.state, {todoInput: {$set: ''}}));
-    this.props.onAddTodo(this.props.token, this.props.uid, this.state.todoInput, index);
   }
+
+  changeAllStatusHandler = (event) => {
+    if(event.target.checked) {
+      this.props.onCompleteAll();
+    } else {
+      this.props.onUncompleteAll();
+    }
+  }
+
+  filterHandler = (e, value) => {
+    if(value) {
+      this.props.onChangeFilter(value);
+    }
+  }
+  
+
 
   componentDidMount() {
     this.props.onFetchTodo(this.props.token, this.props.uid)
   }
 
   render() {
-    let todoListCmp = null;
+    let filterArr = []
     if(this.props.todos) {
-      todoListCmp = this.props.todos.map(todo => (
+      switch (this.props.filter) {
+        case filterType.ACTIVE:
+          filterArr = this.props.todos.filter(todo => !todo.status);  
+          break;
+        case filterType.COMPLETED:
+          filterArr = this.props.todos.filter(todo => todo.status);
+          break;
+        default:
+          filterArr = this.props.todos.filter(() => true);
+          break;
+      }
+    }
+
+    let todoListCmp = null;
+    if(filterArr) {
+      todoListCmp = filterArr.map(todo => (
         <ToDoItem
-          key={todo.id}
+          key={todo.index}
           id={todo.id}
           text={todo.text}
-          completed={todo.status} />
+          completed={todo.status} 
+          removeHandler={() => this.props.onRemoveTodo(todo.id)}
+          changeStatusHandler={() => this.props.onChangeStatus(todo.id)}/>
       ))
       todoListCmp.reverse();
     }
 
     return (
       <>
-        <NavigationBar />
+        <NavigationBar 
+          email={this.props.email}
+        />
         <div className="todo-layout">
           <CssBaseline />
           <Typography variant="display3" className="mt-1">
@@ -72,7 +107,7 @@ class ToDo extends Component {
                   root: 'check-box',
                   checked: 'checked',
                 }}
-                value="checkedH" 
+                onChange={(event) => this.changeAllStatusHandler(event)}
               />
               <input 
                 className={[this.props.classes.root, 'todo-input'].join(' ')}
@@ -87,14 +122,14 @@ class ToDo extends Component {
             {todoListCmp}
             <div className="row filter-box">
               <Typography variant="body1" color="inherit">{this.props.todos.length}  item left</Typography>
-              <ToggleButtonGroup value="left" exclusive>
-                <ToggleButton value="left" classes={{root: 'font-size-1'}}>
+              <ToggleButtonGroup value={this.props.filter} onChange={this.filterHandler} exclusive>
+                <ToggleButton value={filterType.ALL} classes={{root: 'font-size-1'}}>
                   All
                 </ToggleButton>
-                <ToggleButton value="center" classes={{root: 'font-size-1'}}>
+                <ToggleButton value={filterType.ACTIVE} classes={{root: 'font-size-1'}}>
                   Active
                 </ToggleButton>
-                <ToggleButton value="right" classes={{root: 'font-size-1'}}>
+                <ToggleButton value={filterType.COMPLETED} classes={{root: 'font-size-1'}}>
                   Completed
                 </ToggleButton>
               </ToggleButtonGroup>
@@ -109,12 +144,19 @@ class ToDo extends Component {
 const mapStateToProps = state => ({
   uid: state.auth.uid,
   token: state.auth.token,
+  email: state.auth.email,
   todos: state.todo.todos,
+  filter: state.todo.filter,
 })
 const mapDispatchToProps = dispatch => ({
   onSignout: () => dispatch( actions.signout() ),
-  onAddTodo: (token, uid, todoText, index) => dispatch( actions.addTodo(token, uid, todoText, index, false)),
-  onFetchTodo: (token, uid) => dispatch( actions.fetchTodo(token, uid))
+  onFetchTodo: (token, uid) => dispatch( actions.fetchTodo(token, uid)),
+  onAddTodo: (todoId, index, todoText, status) => dispatch( actions.addTodo(todoId, index, todoText, status)),
+  onRemoveTodo: (todoId) => dispatch(actions.removeTodo(todoId)),
+  onChangeStatus: (todoId) => dispatch(actions.changeTodoStatus(todoId)),
+  onCompleteAll: () => dispatch(actions.completeAllTodo()),
+  onUncompleteAll: () => dispatch(actions.uncompleteAllTodo()),
+  onChangeFilter: (filterType) => dispatch(actions.changeTodoFilter(filterType)),
 })
 
 export default connect( mapStateToProps, mapDispatchToProps)(withStyles(styles)(ToDo));

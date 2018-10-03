@@ -1,34 +1,51 @@
 import * as actionTypes from './../actions/actionTypes';
 import update from 'immutability-helper';
-import {errorText} from './../../ultility';
 
 const initialState = {
   todos: [],
+  filter: 'ALL',
   loading: false,
   error: false,
 }
 
-const addTodoStart = (state, action) => {
-  return state;
+const addTodo = (state, action) => {
+  return update(state, {todos: {$push: [action.payload]}});
 }
 
-const addTodoSuccess = (state, action) => {
-  const newTodo = {
-    id: action.payload.todoId,
-    ...action.payload.todo,
-  }
-  return update(state, {todos: {$push: [newTodo]}});
+const removeTodo = (state, action) => {
+  const newTodos = state.todos.filter(todo => todo.id !== action.payload.id);
+  return update(state, {todos: {$set: newTodos}});
 }
 
-const addTodoFail = (state, action) => {
-  return state;
+const changeTodoStatus = (state, action) => {
+  const arrIndex = state.todos.findIndex(todo => todo.id === action.payload.id)
+  return update(state, {todos: {[arrIndex]: {$toggle: ['status']}}})
 }
+
+const completeAllTodo = (state, action) => {
+  const newTodos = state.todos.map(todo => (update(todo, {status: {$set: true}})));
+  return update(state, {todos: {$set: newTodos}});
+}
+
+const uncompleteAllTodo = (state, action) => {
+  const newTodos = state.todos.map(todo => (update(todo, {status: {$set: false}})));
+  return update(state, {todos: {$set: newTodos}});
+}
+
+const changeTodoFilter = (state, action) => {
+  return update(state, {filter: {$set: action.payload.filterType}});
+}
+
+
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.ADD_TODO_START: return addTodoStart(state, action);
-    case actionTypes.ADD_TODO_SUCCESS: return addTodoSuccess(state, action);
-    case actionTypes.ADD_TODO_FAIL: return addTodoFail(state, action);
+    case actionTypes.ADD_TODO: return addTodo(state, action);
+    case actionTypes.REMOVE_TODO: return removeTodo(state, action);
+    case actionTypes.CHANGE_TODO_STATUS: return changeTodoStatus(state, action);
+    case actionTypes.COMPLETED_ALL_TODO: return completeAllTodo(state, action);
+    case actionTypes.UNCOMPLETED_ALL_TODO: return uncompleteAllTodo(state, action);
+    case actionTypes.CHANGE_TODO_FILTER: return changeTodoFilter(state, action);
     default: return state;
   }
 }

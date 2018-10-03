@@ -1,4 +1,4 @@
-import { takeEvery, all, takeLatest } from 'redux-saga/effects';
+import { all, takeLatest } from 'redux-saga/effects';
 
 import * as actionTypes from './../actions/actionTypes';
 import { 
@@ -9,7 +9,6 @@ import {
  } from './auth.sagas';
 
 import { 
-  addTodo,
   fetchTodo
 } from './todos.sagas'
 
@@ -24,7 +23,6 @@ export function* watchAuth() {
 
 export function* watchTodo() {
   yield all([
-    takeLatest(actionTypes.ADD_TODO, addTodo),
     takeLatest(actionTypes.FETCH_TODO, fetchTodo)
   ])
 }

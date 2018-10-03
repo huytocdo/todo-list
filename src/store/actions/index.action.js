@@ -14,12 +14,13 @@ export {
 
  export { 
   addTodo,
-  addTodoStart,
-  addTodoSuccess,
-  addTodoFail,
+  removeTodo,
+  changeTodoStatus,
+  completeAllTodo,
+  uncompleteAllTodo,
+  changeTodoFilter,
   fetchTodo,
   fetchTodoStart,
   fetchTodoSuccess,
   fetchTodoFail,
-  removeTodo,
   } from './todos.action';
