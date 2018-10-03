@@ -1,19 +1,78 @@
-import React, { Component } from 'react'
-
-import AuthLayout from './../../hoc/AuthLayout';
+import React, { Component } from 'react';
+import update from 'immutability-helper';
 import { Link } from 'react-router-dom';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import Favorite from '@material-ui/icons/Favorite';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
+import AuthLayout from './../../hoc/AuthLayout';
+import InputBox from './../../component/UI/InputBox';
+import { checkValidity } from '../../ultility';
+
 export default class SignUp extends Component {
+  state = {
+    signUpForm: {
+      email: {
+        elementType: 'email',
+        label: 'Email Address',
+        inputType: 'email',
+        value: '',
+        validation: {
+          required: true,
+          isEmail: true
+        },
+        valid: false,
+        touched: false,
+      },
+      password: {
+        elementType: 'password',
+        label: 'Password',
+        helperText: 'Minimum 8 characters',
+        inputType: 'password',
+        value: '',
+        validation: {
+          required: true,
+          minLength: 8
+        },
+        valid: false,
+        touched: false,
+      },
+      retypePassword: {
+        elementType: 'retypePassword',
+        label: 'Retype Password',
+        helperText: 'Minimum 8 characters',
+        inputType: 'password',
+        value: '',
+        validation: {
+          required: true,
+          minLength: 8
+        },
+        valid: false,
+        touched: false,
+      },
+    }
+  }
+
+  inputChangedHandler = (value, inputIdentifier) => {
+    this.setState(update(this.state, 
+      { signUpForm: 
+        { [inputIdentifier]: {
+          value: {$set: value},
+          valid: {$set: checkValidity(value, this.state.signUpForm[inputIdentifier].validation)},
+          touched: {$set: true},
+        }}}))
+  }
+
   render() {
+    const formElementsArray = [];
+    for (let key in this.state.signUpForm) {
+      formElementsArray.push({
+        id: key,
+        config: this.state.signUpForm[key],
+      })
+    }
     return (
       <AuthLayout>
         <Avatar className="avatar">
@@ -21,28 +80,19 @@ export default class SignUp extends Component {
         </Avatar>
         <Typography variant="title">Sign Up</Typography>
         <form className="auth-form">
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="email">Email Address</InputLabel>
-            <Input id="email" name="email" autoFocus />
-          </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input
-              name="password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-          </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="password">Retype Password</InputLabel>
-            <Input
-              name="password"
-              type="password"
-              id="retype-password"
-              autoComplete="current-password"
-            />
-          </FormControl>
+          {formElementsArray.map(formEle => (
+              <InputBox 
+                key={formEle.id}
+                label={formEle.config.label}
+                helper={formEle.config.helperText} 
+                elementType={formEle.config.elementType}
+                inputType={formEle.config.inputType}
+                valid={formEle.config.valid}
+                touched={formEle.config.touched}
+                value={formEle.config.value}
+                changed={(value) => this.inputChangedHandler(value, formEle.id)}
+              />
+            ))}
           <Button
             type="submit"
             fullWidth

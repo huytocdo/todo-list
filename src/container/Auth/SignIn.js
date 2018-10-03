@@ -1,21 +1,67 @@
 import React from 'react';
-
-import AuthLayout from './../../hoc/AuthLayout';
-
 import { Link } from 'react-router-dom';
+import update from 'immutability-helper';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import LockIcon from '@material-ui/icons/LockOutlined';
-
 import Typography from '@material-ui/core/Typography';
 
+import AuthLayout from './../../hoc/AuthLayout';
+import InputBox from './../../component/UI/InputBox';
+import { checkValidity } from '../../ultility';
+
+
+
 class SignIn extends React.Component {
+  state = {
+    signInForm: {
+      email: {
+        elementType: 'email',
+        label: 'Email Address',
+        inputType: 'email',
+        value: '',
+        validation: {
+          required: true,
+          isEmail: true
+        },
+        valid: false,
+        touched: false,
+      },
+      password: {
+        elementType: 'password',
+        label: 'Password',
+        helperText: 'Minimum 8 characters',
+        inputType: 'password',
+        value: '',
+        validation: {
+          required: true,
+          minLength: 8
+        },
+        valid: false,
+        touched: false,
+      }
+    }
+  }
+
+  inputChangedHandler = (value, inputIdentifier) => {
+    this.setState(update(this.state, 
+      { signInForm: 
+        { [inputIdentifier]: {
+          value: {$set: value},
+          valid: {$set: checkValidity(value, this.state.signInForm[inputIdentifier].validation)},
+          touched: {$set: true},
+        }}}))
+  }
 
   render() {
+    const formElementsArray = [];
+    for (let key in this.state.signInForm) {
+      formElementsArray.push({
+        id: key,
+        config: this.state.signInForm[key],
+      })
+    }
     return (
       <AuthLayout>
         <Avatar className="avatar">
@@ -23,21 +69,21 @@ class SignIn extends React.Component {
         </Avatar>
         <Typography variant="title">Sign in</Typography>
         <form className="auth-form">
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="email">Email Address</InputLabel>
-            <Input id="email" name="email" autoFocus />
-          </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input
-              name="password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
+          {formElementsArray.map(formEle => (
+            <InputBox 
+              key={formEle.id}
+              label={formEle.config.label}
+              helper={formEle.config.helperText} 
+              elementType={formEle.config.elementType}
+              inputType={formEle.config.inputType}
+              valid={formEle.config.valid}
+              touched={formEle.config.touched}
+              value={formEle.config.value}
+              changed={(value) => this.inputChangedHandler(value, formEle.id)}
             />
-          </FormControl>
+          ))}
           <Button
-            type="button"
+            type="submit"
             fullWidth
             variant="raised"
             color="primary"
