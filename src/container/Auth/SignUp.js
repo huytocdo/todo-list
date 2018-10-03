@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 
 import AuthLayout from './../../hoc/AuthLayout';
 import InputBox from './../../component/UI/InputBox';
-import { checkValidity } from '../../ultility';
+import { checkValidity, errorText } from '../../ultility';
 
 export default class SignUp extends Component {
   state = {
@@ -58,7 +58,6 @@ export default class SignUp extends Component {
 
   inputChangedHandler = (value, inputIdentifier) => {
     const fieldIsValid = checkValidity(value, this.state.signUpForm[inputIdentifier].validation);
-    
     let formIsValid = true;
     for(let field in this.state.signUpForm) {
       if(field !== inputIdentifier) {
@@ -77,7 +76,22 @@ export default class SignUp extends Component {
         }},
         formIsValid: {$set: formIsValid}
       },
-      ))
+    ))
+  }
+
+  signUpHandle = (event) => {
+    event.preventDefault();
+    //Check retype Password
+    const formData = {};
+    if(this.state.signUpForm.password.value === this.state.signUpForm.retypePassword.value ) {
+      for (let field in this.state.signUpForm) {
+        if(field !== 'retypePassword') {
+          formData[field] = this.state.signUpForm[field].value;
+        }
+      }
+    } else {
+      alert(errorText.UNMATCH_RETYPASSWORD);
+    }
   }
 
   render() {

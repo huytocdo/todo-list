@@ -1,3 +1,7 @@
+export const errorText = {
+    UNMATCH_RETYPASSWORD: 'Your password and retype-password are not matched',
+};
+
 export const checkValidity = ( value, rules ) => {
   let isValid = true;
   if ( !rules ) {
