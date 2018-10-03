@@ -1,5 +1,10 @@
 export const errorText = {
-    UNMATCH_RETYPASSWORD: 'Your password and retype-password are not matched',
+    signUp: {
+        UNMATCH_RETYPASSWORD: 'Your password and retype-password are not matched',
+        EMAIL_EXISTS: 'The email address is already in use by another account.',
+        OPERATION_NOT_ALLOWED: 'Password sign-in is disabled for this project.',
+        TOO_MANY_ATTEMPTS_TRY_LATER: 'We have blocked all requests from this device due to unusual activity. Try again later.'
+    }
 };
 
 export const checkValidity = ( value, rules ) => {

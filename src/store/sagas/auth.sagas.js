@@ -17,15 +17,10 @@ export function* signup(action) {
     yield localStorage.setItem("token", response.data.idToken);
     yield localStorage.setItem("expirationDate", expirationDate);
     yield localStorage.setItem("uid", response.data.localId);
-    let payload = yield {
-      token: response.data.idToken,
-      uid: response.data.localId
-    };
-    console.log(response, payload)
     yield put(
-      actions.signupSuccess(payload)
+      actions.signupSuccess(response.data.idToken, response.data.localId)
     );
   } catch(error) {
-    yield put(actions.signupFail(error.response.data.error));
+    yield put(actions.signupFail(error.response.data.error.message));
   }
 }

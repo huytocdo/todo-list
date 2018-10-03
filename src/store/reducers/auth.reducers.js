@@ -1,5 +1,6 @@
 import * as actionTypes from './../actions/actionTypes';
 import update from 'immutability-helper';
+import {errorText} from './../../ultility';
 
 const initialState = {
   error: null,
@@ -9,9 +10,9 @@ const initialState = {
 }
 
 const signupStart = (state, action) => {
-  
   return update(state,{
     loading: {$set: true},
+    error: {$set: ''},
   });
 }
 
@@ -20,15 +21,16 @@ const signupSuccess = (state, action) => {
     token: {$set: action.payload.token},
     uid: {$set: action.payload.uid},
     loading: {$set: false},
+    error: {$set: ''},
   });
 }
 
 const signupFail = (state, action) => {
-  // console.log('signupFail', action);
-  return state;
+  return update(state, {
+    loading: {$set: false},
+    error: {$set: errorText.signUp[action.payload.errorMessage]}
+  });
 }
-
-
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {

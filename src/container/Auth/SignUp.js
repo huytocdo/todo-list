@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import update from 'immutability-helper';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -100,12 +100,24 @@ export class SignUp extends Component {
         config: this.state.signUpForm[key],
       })
     }
+    //Redirect if user logged
+    let authRedirect = null;
+    if(this.props.isLogged) {
+      authRedirect = <Redirect to="/todolist" />
+    }
+    //Show error
+    let errorCmp = null;
+    if(this.props.error) {
+      errorCmp = <Typography variant="subheading" color="error" align="center" className="mt-1">{this.props.error}</Typography>
+    }
     return (
       <AuthLayout>
+        {authRedirect}
         <Avatar className="avatar">
           <Favorite />
         </Avatar>
         <Typography variant="title">Sign Up</Typography>
+        {errorCmp}
         <form className="auth-form" onSubmit={this.signUpHandle}>
           {formElementsArray.map(formEle => (
               <InputBox 
@@ -126,9 +138,11 @@ export class SignUp extends Component {
             variant="raised"
             color="primary"
             className="mt-1"
-            disabled={!this.state.formIsValid}
+            disabled={!this.state.formIsValid || this.props.isLoading}
           >
-            Sign Up
+            {this.props.isLoading 
+            ? 'Loading'
+            : 'Sign Up' }
           </Button>
           <Link to="/" style={{ textDecoration: 'none' }}>
             <Button
@@ -148,7 +162,9 @@ export class SignUp extends Component {
 }
 
 const mapStateToProps = state => ({
-
+  isLogged: state.auth.token !== null,
+  isLoading: state.auth.loading,
+  error: state.auth.error,
 })
 const mapDispatchToProps = dispatch => ({
   onSignUp: (email, password) => dispatch( actions.signup(email, password)),
