@@ -12,11 +12,13 @@ import createSagaMiddleware from 'redux-saga';
 import App from './App';
 
 import authReducer from './store/reducers/auth.reducers';
-import { watchAuth } from './store/sagas/index.saga';
+import todoReducer from './store/reducers/todos.reducers';
+import { watchAuth, watchTodo } from './store/sagas/index.saga';
 
 const composeEnhancers = (process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null) || compose
 const rootReducer = combineReducers({
   auth: authReducer,
+  todo: todoReducer,
 })
 
 const sagaMiddleware = createSagaMiddleware();
@@ -26,6 +28,7 @@ const store = createStore(
 )
 
 sagaMiddleware.run(watchAuth);
+sagaMiddleware.run(watchTodo);
 
 const app = (
   <Provider store={store}>

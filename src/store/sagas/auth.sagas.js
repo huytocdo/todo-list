@@ -1,4 +1,5 @@
 import { put, call } from 'redux-saga/effects';
+import { delay } from "redux-saga";
 import axios from 'axios';
 import * as actions from './../actions/index.action';
 
@@ -20,6 +21,7 @@ export function* signup(action) {
     yield put(
       actions.signupSuccess(response.data.idToken, response.data.localId, response.data.email)
     );
+    yield put(actions.authCheckTimeout(response.data.expiresIn * 1000))
   } catch(error) {
     yield put(actions.signupFail(error.response.data.error.message));
   }
@@ -28,12 +30,13 @@ export function* signup(action) {
 export function* signin(action) {
   yield put(actions.signinStart());
   const accountData = {
-    ...action.payload
+    ...action.payload,
+    returnSecureToken: true,
   }
   const url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyA_HJGN9TNLdwFf8WtYugl4GEHyedzoLiM";
   try {
     const response = yield axios.post(url, accountData);
-    
+    console.log(response)
     const expirationDate = yield new Date(
       new Date().getTime() + response.data.expiresIn * 1000
     );
@@ -43,7 +46,35 @@ export function* signin(action) {
     yield put(
       actions.signinSuccess(response.data.idToken, response.data.localId, response.data.email)
     );
+    yield put(actions.authCheckTimeout(response.data.expiresIn))
   } catch(error) {
     yield put(actions.signinFail(error.response.data.error.message));
   }
+}
+
+export function* authCheckState(action) {
+  const token = yield localStorage.getItem("token");
+  if(!token) {
+    yield put(actions.signout())
+  } else {
+    const expirationDate = yield new Date(
+      localStorage.getItem("expirationDate")
+    );
+    if(expirationDate <= new Date()) {
+      yield put(actions.signout())
+    } else {
+      const uid = yield localStorage.getItem("uid");
+      yield put(actions.signinSuccess(token, uid));
+      yield put(
+        actions.authCheckTimeout(
+          (expirationDate.getTime() - new Date().getTime()) / 1000
+        )
+      );
+    }
+  }
+}
+
+export function* authCheckTimeout(action) {
+  yield delay(action.payload.expirationTime * 1000);
+  yield put(actions.signout());
 }

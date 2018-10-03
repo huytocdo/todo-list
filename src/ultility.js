@@ -42,3 +42,13 @@ export const checkValidity = ( value, rules ) => {
 
   return isValid;
 }
+
+export const createIndex = (objArr) => {
+    let newArr = objArr.map(obj => obj.index)
+    newArr.sort((a,b) => (a - b))
+    if(newArr.length !== 0) {
+        return newArr[newArr.length-1] + 1;
+    } else return 1;
+}
+
+

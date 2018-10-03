@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import update from 'immutability-helper';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 
 import AuthLayout from './../../hoc/AuthLayout';
 import InputBox from './../../component/UI/InputBox';
+import Link from './../../component/UI/Link'
 import { checkValidity, errorText } from '../../ultility';
 
 import * as actions from './../../store/actions/index.action';
@@ -144,7 +145,7 @@ export class SignUp extends Component {
             ? 'Loading'
             : 'Sign Up' }
           </Button>
-          <Link to="/" style={{ textDecoration: 'none' }}>
+          <Link to="/">
             <Button
               type="button"
               fullWidth

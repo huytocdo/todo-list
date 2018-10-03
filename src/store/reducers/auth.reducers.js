@@ -57,6 +57,16 @@ const signinFail = (state, action) => {
   })
 }
 
+const signout = (state, action) => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("expirationDate");
+  localStorage.removeItem("uid");
+  return update(state, {
+    token: {$set: null},
+    uid: {$set: null},
+  })
+}
+
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -65,7 +75,8 @@ const reducer = (state = initialState, action) => {
     case actionTypes.SIGNUP_FAIL: return signupFail(state, action); 
     case actionTypes.SIGNIN_START: return signinStart(state, action);
     case actionTypes.SIGNIN_SUCCESS: return signinSuccess(state, action);
-    case actionTypes.SIGNIN_FAIL: return signinFail(state, action); 
+    case actionTypes.SIGNIN_FAIL: return signinFail(state, action);
+    case actionTypes.SIGNOUT: return signout(state, action); 
     default: return state;
   }
 }

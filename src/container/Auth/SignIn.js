@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import update from 'immutability-helper';
 import { connect } from 'react-redux';
 
@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import AuthLayout from './../../hoc/AuthLayout';
 import InputBox from './../../component/UI/InputBox';
 import { checkValidity } from '../../ultility';
+import Link from './../../component/UI/Link';
 
 import * as actions from './../../store/actions/index.action';
 
@@ -137,7 +138,7 @@ class SignIn extends React.Component {
             Sign in with Github
           </Button>
           <Typography variant="title" align="center" className="mt-1">Or</Typography>
-          <Link to="signup" style={{ textDecoration: 'none' }}>
+          <Link to="signup">
             <Button
               type="button"
               fullWidth

@@ -58,4 +58,24 @@ export const signinFail = (errorMessage) => ({
 
 
 
+export const signout = () => ({
+  type: actionTypes.SIGNOUT,
+})
+
+export const authCheckState = () => ({
+  type: actionTypes.AUTH_CHECK_STATE,
+})
+
+export const authCheckTimeout = (expirationTime) => ({
+  type: actionTypes.AUTH_CHECK_TIMEOUT,
+  payload: {
+    expirationTime,
+  }
+})
+
+
+
+
+
+
 

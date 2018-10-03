@@ -19,7 +19,7 @@ export default ({id, completed, text}) => {
         value={id}
         checked={completed} 
       />
-      <Typography variant="display1" noWrap className={completed && 'active'}>
+      <Typography variant="display1" noWrap className={completed ? 'active' : ' '}>
         {text}
       </Typography>
       <IconButton className="delete-button" aria-label="Delete">
