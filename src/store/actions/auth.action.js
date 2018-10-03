@@ -12,11 +12,12 @@ export const signupStart = () => ({
   type: actionTypes.SIGNUP_START,
 })
 
-export const signupSuccess = (token, uid) => ({
+export const signupSuccess = (token, uid, email) => ({
   type: actionTypes.SIGNUP_SUCCESS,
   payload: {
     token,
     uid,
+    email
   }
 })
 
@@ -39,11 +40,12 @@ export const signinStart = () => ({
   type: actionTypes.SIGNIN_START,
 })
 
-export const signinSuccess = (token, uid) => ({
+export const signinSuccess = (token, uid, email) => ({
   type: actionTypes.SIGNIN_SUCCESS,
   payload: {
     token,
     uid,
+    email
   }
 })
 

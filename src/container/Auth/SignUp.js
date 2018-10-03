@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import update from 'immutability-helper';
-import { Link, Redirect, withRouter } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -12,7 +12,7 @@ import AuthLayout from './../../hoc/AuthLayout';
 import InputBox from './../../component/UI/InputBox';
 import { checkValidity, errorText } from '../../ultility';
 
-import * as actions from './../../store/actions/auth.action';
+import * as actions from './../../store/actions/index.action';
 
 export class SignUp extends Component {
   state = {
@@ -170,4 +170,4 @@ const mapDispatchToProps = dispatch => ({
   onSignUp: (email, password) => dispatch( actions.signup(email, password)),
 })
 
-export default connect( mapStateToProps, mapDispatchToProps )( withRouter(SignUp) );
+export default connect( mapStateToProps, mapDispatchToProps )( SignUp );

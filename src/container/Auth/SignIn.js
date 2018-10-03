@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import update from 'immutability-helper';
+import { connect } from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -11,7 +12,7 @@ import AuthLayout from './../../hoc/AuthLayout';
 import InputBox from './../../component/UI/InputBox';
 import { checkValidity } from '../../ultility';
 
-
+import * as actions from './../../store/actions/index.action';
 
 class SignIn extends React.Component {
   state = {
@@ -67,6 +68,11 @@ class SignIn extends React.Component {
     ))
   }
 
+  signinHandler = (event) => {
+    event.preventDefault();
+    this.props.onSignIn(this.state.signInForm.email.value, this.state.signInForm.password.value);
+  }
+
   render() {
     const formElementsArray = [];
     for (let key in this.state.signInForm) {
@@ -75,13 +81,28 @@ class SignIn extends React.Component {
         config: this.state.signInForm[key],
       })
     }
+
+    //Redirect if user logged
+    let authRedirect = null;
+    if(this.props.isLogged) {
+      authRedirect = <Redirect to="/todolist" />
+    }
+
+    //Show error
+    let errorCmp = null;
+    if(this.props.error) {
+      errorCmp = <Typography variant="subheading" color="error" align="center" className="mt-1">{this.props.error}</Typography>
+    }
+    
     return (
       <AuthLayout>
+        {authRedirect}
         <Avatar className="avatar">
           <LockIcon />
         </Avatar>
         <Typography variant="title">Sign in</Typography>
-        <form className="auth-form">
+        {errorCmp}
+        <form className="auth-form" onSubmit={this.signinHandler}>
           {formElementsArray.map(formEle => (
             <InputBox 
               key={formEle.id}
@@ -101,9 +122,11 @@ class SignIn extends React.Component {
             variant="raised"
             color="primary"
             className="mt-1"
-            disabled={!this.state.formIsValid}
+            disabled={!this.state.formIsValid || this.props.isLoading}
           >
-            Sign in
+            {this.props.isLoading
+            ? 'Loading...' 
+            : 'Sign in' }
           </Button>
           <Button
             type="button"
@@ -131,4 +154,13 @@ class SignIn extends React.Component {
   }
 }
 
-export default SignIn
+const mapStateToProps = state => ({
+  isLogged: state.auth.token !== null,
+  isLoading: state.auth.loading,
+  error: state.auth.error,
+})
+const mapDispatchToProps = dispatch => ({
+  onSignIn: (email, password) => dispatch( actions.signin(email, password)),
+})
+
+export default connect( mapStateToProps, mapDispatchToProps )( SignIn );
