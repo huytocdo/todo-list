@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import update from 'immutability-helper';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import {connect} from 'react-redux';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -11,7 +12,9 @@ import AuthLayout from './../../hoc/AuthLayout';
 import InputBox from './../../component/UI/InputBox';
 import { checkValidity, errorText } from '../../ultility';
 
-export default class SignUp extends Component {
+import * as actions from './../../store/actions/auth.action';
+
+export class SignUp extends Component {
   state = {
     formIsValid: false,
     signUpForm: {
@@ -82,13 +85,8 @@ export default class SignUp extends Component {
   signUpHandle = (event) => {
     event.preventDefault();
     //Check retype Password
-    const formData = {};
     if(this.state.signUpForm.password.value === this.state.signUpForm.retypePassword.value ) {
-      for (let field in this.state.signUpForm) {
-        if(field !== 'retypePassword') {
-          formData[field] = this.state.signUpForm[field].value;
-        }
-      }
+      this.props.onSignUp(this.state.signUpForm.email.value, this.state.signUpForm.password.value);
     } else {
       alert(errorText.UNMATCH_RETYPASSWORD);
     }
@@ -148,3 +146,12 @@ export default class SignUp extends Component {
     )
   }
 }
+
+const mapStateToProps = state => ({
+
+})
+const mapDispatchToProps = dispatch => ({
+  onSignUp: (email, password) => dispatch( actions.signup(email, password)),
+})
+
+export default connect( mapStateToProps, mapDispatchToProps )( withRouter(SignUp) );
