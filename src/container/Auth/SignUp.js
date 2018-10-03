@@ -13,6 +13,7 @@ import { checkValidity } from '../../ultility';
 
 export default class SignUp extends Component {
   state = {
+    formIsValid: false,
     signUpForm: {
       email: {
         elementType: 'email',
@@ -56,13 +57,27 @@ export default class SignUp extends Component {
   }
 
   inputChangedHandler = (value, inputIdentifier) => {
+    const fieldIsValid = checkValidity(value, this.state.signUpForm[inputIdentifier].validation);
+    
+    let formIsValid = true;
+    for(let field in this.state.signUpForm) {
+      if(field !== inputIdentifier) {
+        formIsValid = this.state.signUpForm[field].valid && formIsValid;
+      } else {
+        formIsValid = fieldIsValid && formIsValid;
+      }
+    }
     this.setState(update(this.state, 
-      { signUpForm: 
+      { 
+        signUpForm: 
         { [inputIdentifier]: {
           value: {$set: value},
-          valid: {$set: checkValidity(value, this.state.signUpForm[inputIdentifier].validation)},
+          valid: {$set: fieldIsValid},
           touched: {$set: true},
-        }}}))
+        }},
+        formIsValid: {$set: formIsValid}
+      },
+      ))
   }
 
   render() {
@@ -79,7 +94,7 @@ export default class SignUp extends Component {
           <Favorite />
         </Avatar>
         <Typography variant="title">Sign Up</Typography>
-        <form className="auth-form">
+        <form className="auth-form" onSubmit={this.signUpHandle}>
           {formElementsArray.map(formEle => (
               <InputBox 
                 key={formEle.id}
@@ -99,6 +114,7 @@ export default class SignUp extends Component {
             variant="raised"
             color="primary"
             className="mt-1"
+            disabled={!this.state.formIsValid}
           >
             Sign Up
           </Button>

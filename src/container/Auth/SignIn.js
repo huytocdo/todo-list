@@ -45,13 +45,26 @@ class SignIn extends React.Component {
   }
 
   inputChangedHandler = (value, inputIdentifier) => {
+    const fieldIsValid = checkValidity(value, this.state.signInForm[inputIdentifier].validation);
+    
+    let formIsValid = true;
+    for(let field in this.state.signInForm) {
+      if(field !== inputIdentifier) {
+        formIsValid = this.state.signInForm[field].valid && formIsValid;
+      } else {
+        formIsValid = fieldIsValid && formIsValid;
+      }
+    }
     this.setState(update(this.state, 
       { signInForm: 
         { [inputIdentifier]: {
           value: {$set: value},
           valid: {$set: checkValidity(value, this.state.signInForm[inputIdentifier].validation)},
           touched: {$set: true},
-        }}}))
+        }},
+        formIsValid: {$set: formIsValid},
+      }
+    ))
   }
 
   render() {
@@ -88,6 +101,7 @@ class SignIn extends React.Component {
             variant="raised"
             color="primary"
             className="mt-1"
+            disabled={!this.state.formIsValid}
           >
             Sign in
           </Button>
