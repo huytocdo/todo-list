@@ -79,5 +79,4 @@ export function* authCheckState() {
 export function* authCheckTimeout(action) {
   yield delay(action.payload.expirationTime * 1000);
   yield put(actions.signout());
-  console.log("BANG!!!");
 }

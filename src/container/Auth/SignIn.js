@@ -129,14 +129,14 @@ class SignIn extends React.Component {
             ? 'Loading...' 
             : 'Sign in' }
           </Button>
-          <Button
+          {/* <Button
             type="button"
             fullWidth
             variant="raised"
             className="mt-1"
           >
             Sign in with Github
-          </Button>
+          </Button> */}
           <Typography variant="title" align="center" className="mt-1">Or</Typography>
           <Link to="signup">
             <Button

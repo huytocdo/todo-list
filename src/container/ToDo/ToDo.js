@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
+import {
+  TransitionGroup,
+  CSSTransition
+} from 'react-transition-group';
+
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Checkbox from '@material-ui/core/Checkbox';
 import Icon from '@material-ui/core/Icon';
@@ -75,15 +80,19 @@ class ToDo extends Component {
     let todoListCmp = null;
     if(filterArr || !this.props.loading) {
       todoListCmp = filterArr.map(todo => (
-        <ToDoItem
+        <CSSTransition
           key={todo.id}
-          id={todo.id}
-          text={todo.text}
-          completed={todo.status} 
-          removeHandler={() => this.props.onRemoveTodo(todo.id)}
-          changeStatusHandler={() => this.props.onChangeStatus(todo.id)}/>
+          timeout={300}
+          classNames="fade"
+        >
+          <ToDoItem
+            text={todo.text}
+            completed={todo.status} 
+            removeHandler={() => this.props.onRemoveTodo(todo.id)}
+            changeStatusHandler={() => this.props.onChangeStatus(todo.id)}/>
+        </CSSTransition>
       ))
-      todoListCmp.reverse();
+      todoListCmp.reverse()
     }
 
     return (
@@ -119,6 +128,7 @@ class ToDo extends Component {
                 <Icon>add</Icon>
               </IconButton>
             </div>
+            
             {this.props.loading 
             ? <Grid
                 container
@@ -126,7 +136,9 @@ class ToDo extends Component {
                 justify="center" >
                 <CircularProgress size={80} />
               </Grid>
-            : todoListCmp}
+            : <TransitionGroup>
+                {todoListCmp}
+              </TransitionGroup>}
             <div className="row filter-box">
               <Typography variant="body1" color="inherit">{this.props.todos.length}  item left</Typography>
               <ToggleButtonGroup value={this.props.filter} onChange={this.filterHandler} exclusive>
