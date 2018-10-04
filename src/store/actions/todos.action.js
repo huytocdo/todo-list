@@ -26,11 +26,10 @@ export const fetchTodoFail = (error) => ({
   }
 })
 
-export const addTodo = (id, index, text, status) => ({
+export const addTodo = (id, text, status) => ({
   type: actionTypes.ADD_TODO,
   payload: {
     id,
-    index,
     text,
     status,
   }
@@ -64,6 +63,37 @@ export const changeTodoFilter = (filterType) => ({
     filterType,
   }
 })
+
+export const saveTodos = (uid, token, todos) => ({
+  type: actionTypes.SAVE_TODOS,
+  payload: {
+    uid,
+    token,
+    todos,
+  }
+})
+
+export const saveTodosStart = () => ({
+  type: actionTypes.SAVE_TODOS_START,
+})
+
+export const saveTodosSuccess = () => ({
+  type: actionTypes.SAVE_TODOS_SUCCESS,
+})
+
+export const saveTodosFail = () => ({
+  type: actionTypes.SAVE_TODOS_FAIL,
+})
+export const updateTodosIdToUser = (uid, token, todosId) => ({
+  type: actionTypes.UPDATE_TODOS_ID_TO_USER,
+  payload: {
+    uid,
+    token,
+    todosId,
+  }
+})
+
+
 
 
 

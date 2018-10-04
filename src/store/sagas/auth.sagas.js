@@ -37,7 +37,6 @@ export function* signin(action) {
   const url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyA_HJGN9TNLdwFf8WtYugl4GEHyedzoLiM";
   try {
     const response = yield axios.post(url, accountData);
-    console.log(response)
     const expirationDate = yield new Date(
       new Date().getTime() + response.data.expiresIn * 1000
     );

@@ -36,6 +36,13 @@ const changeTodoFilter = (state, action) => {
   return update(state, {filter: {$set: action.payload.filterType}});
 }
 
+const fetchTodoSuccess = (state, action) => {
+  return update(state, {todos: {$set: action.payload.todos}})
+}
+
+const fetchTodoFail = (state, action) => {
+  return state;
+}
 
 
 const reducer = (state = initialState, action) => {
@@ -46,6 +53,8 @@ const reducer = (state = initialState, action) => {
     case actionTypes.COMPLETED_ALL_TODO: return completeAllTodo(state, action);
     case actionTypes.UNCOMPLETED_ALL_TODO: return uncompleteAllTodo(state, action);
     case actionTypes.CHANGE_TODO_FILTER: return changeTodoFilter(state, action);
+    case actionTypes.FETCH_TODO_SUCCESS: return fetchTodoSuccess(state, action);
+    case actionTypes.FETCH_TODO_FAIL: return fetchTodoFail(state, action);
     default: return state;
   }
 }

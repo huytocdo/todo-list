@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
-
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Checkbox from '@material-ui/core/Checkbox';
 import Icon from '@material-ui/core/Icon';
@@ -14,7 +13,7 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 import NavigationBar from './../../component/NavigationBar';
 import ToDoItem from './../../component/ToDoItem';
 import * as actions from './../../store/actions/index.action';
-import { createIndex, guid, filterType } from './../../ultility';
+import { guid, filterType } from './../../ultility';
 
 const styles = theme => ({
   root: {
@@ -32,9 +31,8 @@ class ToDo extends Component {
   }
 
   submitTodo = () => {
-    const index = createIndex(this.props.todos);
     const todoId = guid();
-    this.props.onAddTodo(todoId, index, this.state.todoInput, false);
+    this.props.onAddTodo(todoId, this.state.todoInput, false);
     this.setState(update(this.state, {todoInput: {$set: ''}}));
   }
 
@@ -51,8 +49,6 @@ class ToDo extends Component {
       this.props.onChangeFilter(value);
     }
   }
-  
-
 
   componentDidMount() {
     this.props.onFetchTodo(this.props.token, this.props.uid)
@@ -78,7 +74,7 @@ class ToDo extends Component {
     if(filterArr) {
       todoListCmp = filterArr.map(todo => (
         <ToDoItem
-          key={todo.index}
+          key={todo.id}
           id={todo.id}
           text={todo.text}
           completed={todo.status} 
@@ -92,6 +88,7 @@ class ToDo extends Component {
       <>
         <NavigationBar 
           email={this.props.email}
+          handleSave={() => this.props.onSaveTodos(this.props.uid, this.props.token, this.props.todos)}
         />
         <div className="todo-layout">
           <CssBaseline />
@@ -151,12 +148,13 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onSignout: () => dispatch( actions.signout() ),
   onFetchTodo: (token, uid) => dispatch( actions.fetchTodo(token, uid)),
-  onAddTodo: (todoId, index, todoText, status) => dispatch( actions.addTodo(todoId, index, todoText, status)),
+  onAddTodo: (todoId, todoText, status) => dispatch( actions.addTodo(todoId, todoText, status)),
   onRemoveTodo: (todoId) => dispatch(actions.removeTodo(todoId)),
   onChangeStatus: (todoId) => dispatch(actions.changeTodoStatus(todoId)),
   onCompleteAll: () => dispatch(actions.completeAllTodo()),
   onUncompleteAll: () => dispatch(actions.uncompleteAllTodo()),
   onChangeFilter: (filterType) => dispatch(actions.changeTodoFilter(filterType)),
+  onSaveTodos: (uid, token, todos) => dispatch(actions.saveTodos(uid, token, todos))
 })
 
 export default connect( mapStateToProps, mapDispatchToProps)(withStyles(styles)(ToDo));

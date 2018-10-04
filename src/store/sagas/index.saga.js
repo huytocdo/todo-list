@@ -9,7 +9,8 @@ import {
  } from './auth.sagas';
 
 import { 
-  fetchTodo
+  fetchTodo,
+  saveTodos,
 } from './todos.sagas'
 
 export function* watchAuth() {
@@ -23,6 +24,7 @@ export function* watchAuth() {
 
 export function* watchTodo() {
   yield all([
-    takeLatest(actionTypes.FETCH_TODO, fetchTodo)
+    takeLatest(actionTypes.FETCH_TODO, fetchTodo),
+    takeLatest(actionTypes.SAVE_TODOS, saveTodos),
   ])
 }
