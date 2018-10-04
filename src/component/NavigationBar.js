@@ -7,7 +7,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Link from './../component/UI/Link';
 
-export default ({email, handleSave}) => {
+export default ({email, handleSave, loading}) => {
   return (
     <AppBar position="static">
       <Toolbar>

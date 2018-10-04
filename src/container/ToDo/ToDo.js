@@ -9,6 +9,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
+import Grid from '@material-ui/core/Grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import NavigationBar from './../../component/NavigationBar';
 import ToDoItem from './../../component/ToDoItem';
@@ -71,7 +73,7 @@ class ToDo extends Component {
     }
 
     let todoListCmp = null;
-    if(filterArr) {
+    if(filterArr || !this.props.loading) {
       todoListCmp = filterArr.map(todo => (
         <ToDoItem
           key={todo.id}
@@ -89,6 +91,7 @@ class ToDo extends Component {
         <NavigationBar 
           email={this.props.email}
           handleSave={() => this.props.onSaveTodos(this.props.uid, this.props.token, this.props.todos)}
+          loading={this.props.loading}
         />
         <div className="todo-layout">
           <CssBaseline />
@@ -116,7 +119,14 @@ class ToDo extends Component {
                 <Icon>add</Icon>
               </IconButton>
             </div>
-            {todoListCmp}
+            {this.props.loading 
+            ? <Grid
+                container
+                className="mt-1"
+                justify="center" >
+                <CircularProgress size={80} />
+              </Grid>
+            : todoListCmp}
             <div className="row filter-box">
               <Typography variant="body1" color="inherit">{this.props.todos.length}  item left</Typography>
               <ToggleButtonGroup value={this.props.filter} onChange={this.filterHandler} exclusive>
@@ -144,6 +154,7 @@ const mapStateToProps = state => ({
   email: state.auth.email,
   todos: state.todo.todos,
   filter: state.todo.filter,
+  loading: state.todo.loading,
 })
 const mapDispatchToProps = dispatch => ({
   onSignout: () => dispatch( actions.signout() ),

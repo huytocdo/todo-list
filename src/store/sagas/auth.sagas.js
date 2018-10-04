@@ -22,7 +22,7 @@ export function* signup(action) {
     yield put(
       actions.signupSuccess(response.data.idToken, response.data.localId, response.data.email)
     );
-    yield put(actions.authCheckTimeout(response.data.expiresIn * 1000))
+    yield put(actions.authCheckTimeout(response.data.expiresIn))
   } catch(error) {
     yield put(actions.signupFail(error.response.data.error.message));
   }
@@ -79,4 +79,5 @@ export function* authCheckState() {
 export function* authCheckTimeout(action) {
   yield delay(action.payload.expirationTime * 1000);
   yield put(actions.signout());
+  console.log("BANG!!!");
 }

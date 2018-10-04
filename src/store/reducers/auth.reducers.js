@@ -21,6 +21,7 @@ const signupSuccess = (state, action) => {
   return update(state, {
     token: {$set: action.payload.token},
     uid: {$set: action.payload.uid},
+    email: {$set: action.payload.email},
     loading: {$set: false},
     error: {$set: ''},
   });
@@ -61,9 +62,11 @@ const signout = (state, action) => {
   localStorage.removeItem("token");
   localStorage.removeItem("expirationDate");
   localStorage.removeItem("uid");
+  localStorage.removeItem("email");
   return update(state, {
     token: {$set: null},
     uid: {$set: null},
+    email: {$set: null},
   })
 }
 
